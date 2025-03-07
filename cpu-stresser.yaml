@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-stressor-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-stressor
+  template:
+    metadata:
+      labels:
+        app: cpu-stressor
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nodeType
+                operator: In
+                values:
+                - "autoscaling"
+      tolerations:
+      - key: "oci.oraclecloud.com/oke-is-preemptible"
+        operator: "Exists"
+        effect: "NoSchedule"      
+      containers:
+        - name: cpu-stressor
+          image: narmidm/k8s-pod-cpu-stressor:latest
+          args:
+            - "-cpu=2"
+            - "-duration=60s"
+            - "-forever"
+          resources:
+            limits:
+              cpu: "4"
+            requests:
+              cpu: "2"
