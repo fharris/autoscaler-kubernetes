@@ -27,13 +27,14 @@ spec:
         effect: "NoSchedule"      
       containers:
         - name: cpu-stressor
-          image: narmidm/k8s-pod-cpu-stressor:latest
+          #image: narmidm/k8s-pod-cpu-stressor:latest
+          image: ocir.us-ashburn-1.oci.oraclecloud.com/idfiw4nvpzwl/k8s-pod-cpu-stressor:latest
           args:
-            - "-cpu=2"
+            - "-cpu=0.5"
             - "-duration=60s"
             - "-forever"
           resources:
             limits:
-              cpu: "4"
+              cpu: "1"
             requests:
-              cpu: "2"
+              cpu: "0.5"

@@ -46,3 +46,22 @@ spec:
   - port: 80
   selector:
     run: php-apache
+  
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-apache-internal-lb
+  labels:
+    run: php-apache
+  annotations:
+    oci.oraclecloud.com/load-balancer-type: "nlb"
+    oci-network-load-balancer.oraclecloud.com/internal: "true"
+    oci-network-load-balancer.oraclecloud.com/subnet: "ocid1.subnet.oc1.iad.aaaaaaaaxxmx4ybbmpvmn5vrx5uhh24gqkwt2lfpjwkoahd5c6en5kaaribq"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    run: php-apache
